@@ -1,0 +1,5 @@
+import libtcodpy as libtcod
+
+
+class KeyboardControls(object):
+    
