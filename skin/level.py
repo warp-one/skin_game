@@ -72,8 +72,7 @@ class Level(object):
     def clear_all(self):
 #        for x in xrange(settings.SCREEN_WIDTH):
 #            for y in xrange(settings.SCREEN_HEIGHT):
-#                libtcod.console_put_char(self.background, x, y, 
-#                                ' ', libtcod.BKGND_NONE)
+#                libtcod.console_set_char_background(self.fluids_layer, x, y, libtcod.black)
         if self.cellmap.cursor:
             x, y = self.cellmap.cursor.x, self.cellmap.cursor.y
             libtcod.console_put_char(self.hud_layer, x, y,

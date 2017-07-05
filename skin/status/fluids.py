@@ -3,7 +3,7 @@ import libtcodpy as libtcod
 class Status(object):
     is_ = []
     char = '?'
-    color = libtcod.green
+    colors = (libtcod.green)
     name = "a mysterious substance"
     adjective = "sticky"
     
@@ -35,6 +35,9 @@ class Status(object):
             amt = 0.
         self._amount = amt
             
+    @property
+    def color(self):
+        return self.colors[int(float(self.amount)/self.max_amount*(len(self.colors) - 1))]
             
 class Blood(Status):
     is_ = ["wet", "food"]
@@ -52,15 +55,12 @@ class Blood(Status):
         else:
             return libtcod.CHAR_BLOCK1
             
-    @property
-    def color(self):
-        return self.colors[int(float(self.amount)/self.max_amount*3)]
         
     
 class Sweat(Status):
     is_ = ["wet", "food"]
-    color = libtcod.lighter_blue
-    char = libtcod.CHAR_BLOCK2
+    colors = (libtcod.lighter_blue, libtcod.light_blue,
+              libtcod.blue)
     name = "sweat"
     adjective = "sweaty"
     

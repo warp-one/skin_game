@@ -1,8 +1,11 @@
-from random import choice
+from random import choice, randint
 
 import libtcodpy as libtcod
 
 import colors, constants, tools, controls, status
+
+
+CALCULATED_MOISTURE_TENDENCY = .3
 
 
 class SkinCell(object):
@@ -48,31 +51,47 @@ class SkinCell(object):
         return sum([s.quality_amount(adj) for s in self.statuses])
         
     def status_percentage(self, adj):
-        return reduce(tools.mean, [s.quality_percentage(adj) for s in self.statuses]) 
+        try:
+            return reduce(tools.mean, [s.quality_percentage(adj) for s in self.statuses])
+        except TypeError:
+            return 0.
         
-    def add_status(self, status_type):
-        if status_type == "blood":
-            for s in self.statuses:
-                if s.name == "blood":
-                    s.amount += 1
-                break
-            else:
-                self.statuses.append(status.create_status("blood"))
+    def add_status(self, status_type, amt=1):
+        for s in self.statuses:
+            if s.name == status_type:
+                s.amount += amt
+            break
+        else:
+            if amt > 0:
+                self.statuses.append(status.create_status(status_type, amt=amt))
                 
-    def add_flora(self, flora):
-        self.flora = flora
-        
-        
+    def sweat(self):
+        if self.terrain and self.terrain.name == "hair":
+            will_sweat = not randint(0, 15)
+        else:
+            will_sweat = not randint(0, 220)
+        if will_sweat:
+            self.add_status("sweat")
+            
+    def sweat_evaporate(self):
+       #if self.status_percentage("wet") > CALCULATED_MOISTURE_TENDENCY:
+       
+        if not randint(0, 4):
+            self.add_status("sweat", amt=-1)
+                
+                
     def update(self):
         #self.dry(heatmap, exposedmap)
         #self.break_out()
         #self.heal()
         #etc
+        self.sweat()
+        self.sweat_evaporate()
         
         for s in self.statuses:
-            if s.amount < 0.:
+            if s.amount <= 0:
                 self.statuses.remove(s)
-            
+                
             
 class CellMap(object):
     def __init__(self, w, h, cons):
@@ -119,6 +138,9 @@ class CellMap(object):
                     char = s.char
 #                        libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
                     libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
+            else:
+                libtcod.console_set_char_background(self.fluids_con, x, y, libtcod.black)
+
                     
                                             
         if self.cursor:

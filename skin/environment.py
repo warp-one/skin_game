@@ -23,8 +23,8 @@ def color_contest(A, B):
         
         
 # Rules
-test_rules = [color_contest,
-             ]
+test_rules = []#[color_contest,]
+             
 
 
 
