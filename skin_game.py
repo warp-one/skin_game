@@ -26,8 +26,16 @@ class Game(object):
             self.current_level.render_all()
             libtcod.console_blit(self.current_level.background, 0, 0, 
                                  self.width, self.height, 0, 0, 0)
+            libtcod.console_blit(self.current_level.fluids_layer, 0, 0, 
+                                 self.width, self.height, 0, 0, 0,
+                                 .5,
+                                 0.0)
+            libtcod.console_blit(self.current_level.hud_layer, 0, 0, 
+                                 self.width, self.height, 0, 0, 0,
+                                 1.0,
+                                 0.0)
             libtcod.console_flush()
-#            self.current_level.clear_all()
+            self.current_level.clear_all()
             exit = self.current_level.player_controls.handle_keys()
             if exit:
                 break

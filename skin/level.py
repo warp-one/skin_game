@@ -1,6 +1,6 @@
 import libtcodpy as libtcod
 
-import cellmap, settings, controls
+import cellmap, settings, controls, environment
 
 class Camera(object):
     
@@ -36,25 +36,44 @@ class Level(object):
 
     def __init__(self, game):
         self.game = game
+        self.consoles = None
         self.create_consoles()
-        self.cellmap = cellmap.CellMap(self.w, self.h, self.background)
         self.camera = Camera(self)
+        
+        self.cellmap = cellmap.CellMap(self.w, self.h, self.consoles)
         self.player_controls = controls.KeyboardControls(self.cellmap)
+        self.environment = environment.BasicEnvironment(self.cellmap, environment.test_rules)
+
+        self.time_since_update = 0.
         
     def create_consoles(self):
         self.background = libtcod.console_new(self.w, self.h)
-        self.foreground = libtcod.console_new(self.w, self.h)
         libtcod.console_set_default_background(self.background, libtcod.blue)
+        self.fluids_layer = libtcod.console_new(self.w, self.h)
+        libtcod.console_set_default_background(self.fluids_layer, libtcod.blue)
+        self.hud_layer = libtcod.console_new(self.w, self.h)
+        libtcod.console_set_default_background(self.hud_layer, libtcod.blue)
+        self.consoles = {"background":self.background, 
+                         "fluids":self.fluids_layer, 
+                         "hud":self.hud_layer}
 
     def update_all(self):
-        self.cellmap.update()
+        self.time_since_update += libtcod.sys_get_last_frame_length()
+        if self.time_since_update > 1.:
+            self.time_since_update = 0.
+            self.environment.update()
+            self.cellmap.update()
             
     def render_all(self):
 #        self.camera.move_camera(self.player.x, self.player.y)
         self.cellmap.draw()
 
     def clear_all(self):
-        for x in xrange(settings.SCREEN_WIDTH):
-            for y in xrange(settings.SCREEN_HEIGHT):
-                libtcod.console_put_char(self.foreground, x, y, 
-                                ' ', libtcod.BKGND_NONE)
+#        for x in xrange(settings.SCREEN_WIDTH):
+#            for y in xrange(settings.SCREEN_HEIGHT):
+#                libtcod.console_put_char(self.background, x, y, 
+#                                ' ', libtcod.BKGND_NONE)
+        if self.cellmap.cursor:
+            x, y = self.cellmap.cursor.x, self.cellmap.cursor.y
+            libtcod.console_put_char(self.hud_layer, x, y,
+                                    ' ', libtcod.BKGND_NONE)
