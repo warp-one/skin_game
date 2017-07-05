@@ -50,6 +50,7 @@ class Level(object):
         self.background = libtcod.console_new(self.w, self.h)
         libtcod.console_set_default_background(self.background, libtcod.blue)
         self.fluids_layer = libtcod.console_new(self.w, self.h)
+        libtcod.console_set_key_color(self.fluids_layer, libtcod.black)
         libtcod.console_set_default_background(self.fluids_layer, libtcod.blue)
         self.hud_layer = libtcod.console_new(self.w, self.h)
         libtcod.console_set_default_background(self.hud_layer, libtcod.blue)

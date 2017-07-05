@@ -1,4 +1,14 @@
+import colors
+
 class Disease(object):
-    def __init__(self, name):
-        self.name = name
+    name = "disease"
+    water_min = 0.1
+    water_max = 1.0
+    def __init__(self):
+        pass
         
+class Malassezia(Disease):
+    name = "Malassezia"
+    flora_type = "fungus"
+    char = 'p'
+    color = colors.FLORA_MALASSEZIA_COLOR

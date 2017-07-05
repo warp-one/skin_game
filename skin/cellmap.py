@@ -13,6 +13,8 @@ class SkinCell(object):
         self._color = color
         self.char = ' '
         self.statuses = []
+        self.flora = None
+        self.fauna = None
         
         self.temperature = constants.TEMP_SKIN_SURFACE_AVG
         self.moisture = constants.MOISTURE_SKIN_STARTING
@@ -50,6 +52,9 @@ class SkinCell(object):
                 break
             else:
                 self.statuses.append(status.create_status("blood"))
+                
+    def add_flora(self, flora):
+        self.flora = flora
         
         
     def update(self):
@@ -101,14 +106,19 @@ class CellMap(object):
             libtcod.console_set_default_foreground(self.cell_con, libtcod.dark_sepia)
             libtcod.console_put_char(self.cell_con, x, y, 
                                             char, libtcod.BKGND_NONE)
-            if c.statuses:
-                for s in c.statuses:
-                    color = s.color
-                    char = s.char
-#                    libtcod.console_set_char_background(self.fluids_con, x, y, color)
-                    libtcod.console_set_default_foreground(self.fluids_con, color)
-                    libtcod.console_put_char(self.fluids_con, x, y, 
-                                                    char, libtcod.BKGND_NONE)
+            if c.flora or c.statuses:
+                if c.statuses:
+                    for s in c.statuses:
+                        bgcolor = fgcolor = s.color
+                        char = s.char
+                        libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
+                if c.flora:
+                    char = c.flora.char
+                    fgcolor = c.flora.color
+                    libtcod.console_set_char_background(self.fluids_con, x, y, libtcod.white)
+                libtcod.console_set_default_foreground(self.fluids_con, fgcolor)
+                libtcod.console_put_char(self.fluids_con, x, y, 
+                                                char, libtcod.BKGND_NONE)
                     
                                             
         if self.cursor:
