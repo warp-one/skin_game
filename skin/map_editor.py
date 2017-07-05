@@ -1,8 +1,8 @@
-import disease
+import disease, terrain
 
 class MapEditor(object):
 
-    keys = ['b', 'f']
+    keys = ['b', 'f', 'h']
 
     def __init__(self, cellmap):
         self.cellmap = cellmap
@@ -12,3 +12,5 @@ class MapEditor(object):
             self.cellmap.cell_get(x, y).add_status("blood")
         elif key == 'f':
             self.cellmap.cell_get(x, y).add_flora(disease.Malassezia())
+        elif key == 'h':
+            self.cellmap.cell_get(x, y).terrain = terrain.HairFollicle()

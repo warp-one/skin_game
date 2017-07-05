@@ -11,13 +11,19 @@ class SkinCell(object):
     def __init__(self, cellmap, color):
         self.cellmap = cellmap
         self._color = color
-        self.char = ' '
+        self._char = ' '
         self.statuses = []
-        self.flora = None
-        self.fauna = None
+        self.terrain = None
         
         self.temperature = constants.TEMP_SKIN_SURFACE_AVG
         self.moisture = constants.MOISTURE_SKIN_STARTING
+        
+    @property
+    def char(self):
+        if self.terrain:
+            return self.terrain.char
+        else:
+            return self._char
         
     @property
     def color(self):
@@ -99,26 +105,20 @@ class CellMap(object):
     def draw(self):
         for i, c in enumerate(self.cells):
             x, y = tools.index_to_xy(i, self.w)
-            color = c.color
+            bgcolor = c.color
+            fgcolor = (c.terrain.color if c.terrain else libtcod.black)
             char = c.char
 #            x, y = self.game.camera.to_camera_coordinates(c.x, c.y)
-            libtcod.console_set_char_background(self.cell_con, x, y, color)
-            libtcod.console_set_default_foreground(self.cell_con, libtcod.dark_sepia)
+            libtcod.console_set_char_background(self.cell_con, x, y, bgcolor)
+            libtcod.console_set_default_foreground(self.cell_con, fgcolor)
             libtcod.console_put_char(self.cell_con, x, y, 
                                             char, libtcod.BKGND_NONE)
-            if c.flora or c.statuses:
-                if c.statuses:
-                    for s in c.statuses:
-                        bgcolor = fgcolor = s.color
-                        char = s.char
-                        libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
-                if c.flora:
-                    char = c.flora.char
-                    fgcolor = c.flora.color
-                    libtcod.console_set_char_background(self.fluids_con, x, y, libtcod.white)
-                libtcod.console_set_default_foreground(self.fluids_con, fgcolor)
-                libtcod.console_put_char(self.fluids_con, x, y, 
-                                                char, libtcod.BKGND_NONE)
+            if c.statuses:
+                for s in c.statuses:
+                    bgcolor = s.color
+                    char = s.char
+#                        libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
+                    libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
                     
                                             
         if self.cursor:

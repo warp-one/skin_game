@@ -38,9 +38,10 @@ class Status(object):
             
 class Blood(Status):
     is_ = ["wet", "food"]
-    color = libtcod.red
     name = "blood"
     adjective = "bloody"
+    colors = (libtcod.lighter_red, libtcod.light_red,
+              libtcod.red, libtcod.dark_red)
     
     @property
     def char(self):
@@ -50,6 +51,11 @@ class Blood(Status):
             return libtcod.CHAR_BLOCK2
         else:
             return libtcod.CHAR_BLOCK1
+            
+    @property
+    def color(self):
+        return self.colors[int(float(self.amount)/self.max_amount*3)]
+        
     
 class Sweat(Status):
     is_ = ["wet", "food"]
