@@ -2,7 +2,10 @@ import libtcodpy as libtcod
 
 class Status(object):
     is_ = []
-    name = None
+    char = '?'
+    color = libtcod.green
+    name = "a mysterious substance"
+    adjective = "sticky"
     
     def __init__(self, amount, max):
         self._amount = amount
@@ -54,3 +57,9 @@ class Sweat(Status):
     char = libtcod.CHAR_BLOCK2
     name = "sweat"
     adjective = "sweaty"
+    
+    
+class DriedBlood(Blood):
+    is_ = ["food"]
+    color = libtcod.darkest_red
+    name = "dried blood"
