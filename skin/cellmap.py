@@ -15,7 +15,7 @@ class SkinCell(object):
         self.cellmap = cellmap
         self._color = color
         self._char = ' '
-        self.statuses = []
+        self.statuses = {}
         self.terrain = None
         
         self.temperature = constants.TEMP_SKIN_SURFACE_AVG
@@ -48,22 +48,26 @@ class SkinCell(object):
         self.moisture += (self.status_percentage("wet") - self.moisture)
         
     def status_amount(self, adj):
-        return sum([s.quality_amount(adj) for s in self.statuses])
+        return sum([s.quality_amount(adj) for s in self.statuses.values()])
         
     def status_percentage(self, adj):
         try:
-            return reduce(tools.mean, [s.quality_percentage(adj) for s in self.statuses])
+            return reduce(tools.mean, [s.quality_percentage(adj) for s in self.statuses.values()])
         except TypeError:
             return 0.
         
-    def add_status(self, status_type, amt=1):
-        for s in self.statuses:
-            if s.name == status_type:
-                s.amount += amt
-            break
+    def status_add(self, status_type, amt=1):
+        if status_type in self.statuses:
+            self.statuses[status_type].amount += amt
         else:
             if amt > 0:
-                self.statuses.append(status.create_status(status_type, amt=amt))
+                self.statuses[status_type] = status.create_status(status_type, amt=amt)
+                
+    def status_get(self, status_type):
+        try:
+            return self.statuses[status_type]
+        except KeyError:
+            return False
                 
     def sweat(self):
         if self.terrain and self.terrain.name == "hair":
@@ -71,13 +75,12 @@ class SkinCell(object):
         else:
             will_sweat = not randint(0, 220)
         if will_sweat:
-            self.add_status("sweat")
+            self.status_add("sweat")
             
     def sweat_evaporate(self):
-       #if self.status_percentage("wet") > CALCULATED_MOISTURE_TENDENCY:
-       
+        #if self.status_percentage("wet") > CALCULATED_MOISTURE_TENDENCY:
         if not randint(0, 4):
-            self.add_status("sweat", amt=-1)
+            self.status_add("sweat", amt=-1)
                 
                 
     def update(self):
@@ -88,9 +91,9 @@ class SkinCell(object):
         self.sweat()
         self.sweat_evaporate()
         
-        for s in self.statuses:
+        for s in self.statuses.values():
             if s.amount <= 0:
-                self.statuses.remove(s)
+                del self.statuses[s.name]
                 
             
 class CellMap(object):
@@ -121,6 +124,10 @@ class CellMap(object):
         i = tools.xy_to_index(x, y, self.w)
         return self.cells[i]
         
+#    def evaporate(self):
+#        sweat_cells = filter(lambda x: x.status_get("sweat"), self.cells)
+#        if len(sweat_cells)/len(self.cells)
+        
     def draw(self):
         for i, c in enumerate(self.cells):
             x, y = tools.index_to_xy(i, self.w)
@@ -133,7 +140,7 @@ class CellMap(object):
             libtcod.console_put_char(self.cell_con, x, y, 
                                             char, libtcod.BKGND_NONE)
             if c.statuses:
-                for s in c.statuses:
+                for s in c.statuses.values():
                     bgcolor = s.color
                     char = s.char
 #                        libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
