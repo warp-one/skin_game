@@ -17,3 +17,6 @@ def adjacent_cell_index_pairs(w, h):
     
 def mean(data):
     return sum(data)/float(len(data))
+    
+def xy_to_NSEW(x, y):
+    return ((0, -1), (0, 1), (1, 0), (-1, 0))

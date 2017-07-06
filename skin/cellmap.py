@@ -18,6 +18,7 @@ class SkinCell(object):
         self.statuses = {}
         self.terrain = None
         self.flora = None
+        self.location = None
         
         self.temperature = constants.TEMP_SKIN_SURFACE_AVG
         self.moisture = constants.MOISTURE_SKIN_STARTING
@@ -82,6 +83,7 @@ class SkinCell(object):
         #if self.status_percentage("wet") > CALCULATED_MOISTURE_TENDENCY:
         if not randint(0, 4):
             self.status_add("sweat", amt=-1)
+            
                 
                 
     def update(self):
@@ -116,6 +118,7 @@ class CellMap(object):
     def cell_add(self, x, y, cell):
         i = tools.xy_to_index(x, y, self.w)
         self.cells[i] = cell
+        cell.location = (x, y)
         
     def cell_remove(self, x, y):
         i = tools.xy_to_index(x, y, self.w)

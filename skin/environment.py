@@ -14,17 +14,23 @@ adjacent_NSEW = tools.adjacent_cell_index_pairs
 # does hair keep the skin warm
 # does sweat cool it
 # def temperature_sweat
-def color_contest(A, B):
+def color_contest(A, B, _, _1):
     if not randint(0, 10):
         A._color, B._color = B._color, A._color
-                                  
-                                    
+        
+def migrate_disease(A, B):
+    if not randint(0, 10):
+        if (A.flora is None or B.flora is None) and A.flora != B.flora:
+            source = (A if A.flora else B)
+            destination = (B if source is A else A)
+            destination.flora = source.flora
+            source.flora = None
             
         
         
 # Rules
 # rule sets
-test_rules = []#[color_contest,]
+test_rules = [migrate_disease]#[color_contest,]
 
 # definitions
              
