@@ -23,7 +23,10 @@ def color_contest(A, B):
         
         
 # Rules
+# rule sets
 test_rules = []#[color_contest,]
+
+# definitions
              
 
 

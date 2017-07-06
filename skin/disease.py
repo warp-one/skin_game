@@ -12,3 +12,4 @@ class Malassezia(Disease):
     flora_type = "fungus"
     char = 'p'
     color = colors.FLORA_MALASSEZIA_COLOR
+    bgcolor = colors.FLORA_MALASSEZIA_MAP_COLOR

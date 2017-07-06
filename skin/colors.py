@@ -7,3 +7,4 @@ LIGHT_SKIN_TONES = [libtcod.lightest_amber,
                     ]
                     
 FLORA_MALASSEZIA_COLOR = libtcod.Color(176, 69, 121)
+FLORA_MALASSEZIA_MAP_COLOR = libtcod.light_green #libtcod.Color(206, 228, 209)

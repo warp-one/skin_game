@@ -17,6 +17,7 @@ class SkinCell(object):
         self._char = ' '
         self.statuses = {}
         self.terrain = None
+        self.flora = None
         
         self.temperature = constants.TEMP_SKIN_SURFACE_AVG
         self.moisture = constants.MOISTURE_SKIN_STARTING
@@ -139,12 +140,21 @@ class CellMap(object):
             libtcod.console_set_default_foreground(self.cell_con, fgcolor)
             libtcod.console_put_char(self.cell_con, x, y, 
                                             char, libtcod.BKGND_NONE)
-            if c.statuses:
-                for s in c.statuses.values():
-                    bgcolor = s.color
-                    char = s.char
+            if c.statuses or c.flora:
+                if c.statuses:
+                    for s in c.statuses.values():
+                        bgcolor = s.color
+                        char = s.char
+                
+                if c.flora:
+                    char = c.flora.char
+                    fgcolor = c.flora.color
+                    bgcolor = libtcod.color_lerp(bgcolor, c.flora.bgcolor, .5)
 #                        libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
-                    libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
+                libtcod.console_set_char_background(self.fluids_con, x, y, bgcolor)
+                libtcod.console_set_default_foreground(self.fluids_con, fgcolor)
+                libtcod.console_put_char(self.fluids_con, x, y, 
+                                                char, libtcod.BKGND_NONE)
             else:
                 libtcod.console_set_char_background(self.fluids_con, x, y, libtcod.black)
 

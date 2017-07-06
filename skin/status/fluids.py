@@ -45,6 +45,7 @@ class Blood(Status):
     adjective = "bloody"
     colors = (libtcod.lighter_red, libtcod.light_red,
               libtcod.red, libtcod.dark_red)
+    char = ' '
     
     @property
     def char(self):
@@ -58,6 +59,7 @@ class Blood(Status):
         
     
 class Sweat(Status):
+    char = ' '
     is_ = ["wet", "food"]
     colors = (libtcod.lighter_blue, libtcod.light_blue,
               libtcod.blue)

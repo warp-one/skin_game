@@ -70,6 +70,9 @@ class Level(object):
         self.cellmap.draw()
 
     def clear_all(self):
+#        for c in self.consoles:
+#            libtcod.console_clear(c)
+#        return
 #        for x in xrange(settings.SCREEN_WIDTH):
 #            for y in xrange(settings.SCREEN_HEIGHT):
 #                libtcod.console_set_char_background(self.fluids_layer, x, y, libtcod.black)

@@ -28,7 +28,7 @@ class Game(object):
                                  self.width, self.height, 0, 0, 0)
             libtcod.console_blit(self.current_level.fluids_layer, 0, 0, 
                                  self.width, self.height, 0, 0, 0,
-                                 .5,
+                                 1.0,
                                  0.5)
             libtcod.console_blit(self.current_level.hud_layer, 0, 0, 
                                  self.width, self.height, 0, 0, 0,
