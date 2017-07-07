@@ -19,7 +19,7 @@ def color_contest(A, B, _, _1):
         A._color, B._color = B._color, A._color
         
 def migrate_disease(A, B):
-    if not randint(0, 10):
+    if True:#not randint(0, 10):
         if (A.flora is None or B.flora is None) and A.flora != B.flora:
             source = (A if A.flora else B)
             destination = (B if source is A else A)

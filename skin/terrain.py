@@ -12,6 +12,6 @@ class HairFollicle(Terrain):
     name = "hair"
     
 class SebaceousGland(Terrain):
-    char = '.'
+    char = libtcod.CHAR_BULLET_SQUARE
     color = libtcod.white
     name = "gland"
