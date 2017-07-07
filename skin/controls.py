@@ -21,6 +21,7 @@ class Cursor(object):
             self.y = self.maxY
         elif self.y < 0:
             self.y = 0
+        print self.x, self.y
             
     def on_notify(self, entity, event):
         if event == "cursor move":

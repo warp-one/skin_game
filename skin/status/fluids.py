@@ -1,5 +1,7 @@
 import libtcodpy as libtcod
 
+from skin import colors
+
 class Status(object):
     is_ = []
     char = '?'
@@ -40,7 +42,7 @@ class Status(object):
         return self.colors[int(float(self.amount)/self.max_amount*(len(self.colors) - 1))]
             
 class Blood(Status):
-    is_ = ["wet", "food"]
+    is_ = ["liquids", "food"]
     name = "blood"
     adjective = "bloody"
     colors = (libtcod.lighter_red, libtcod.light_red,
@@ -57,10 +59,17 @@ class Blood(Status):
             return libtcod.CHAR_BLOCK1
             
         
+class Sebum(Status):
+    is_ = ["lipids"]
+    name = "sebum"
+    adjective = "oleaginous"
+    colors = [colors.SEBUM]
+    char = ' '
+        
     
 class Sweat(Status):
     char = ' '
-    is_ = ["wet", "food"]
+    is_ = ["liquids", "food"]
     colors = (libtcod.lighter_blue, libtcod.light_blue,
               libtcod.blue)
     name = "sweat"

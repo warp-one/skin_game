@@ -9,3 +9,5 @@ def create_status(name, amt=1):
         return Blood(amt, 4)
     elif name == "sweat":
         return Sweat(amt, 6)
+    elif name == "sebum":
+        return Sebum(amt, 3)

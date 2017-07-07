@@ -2,7 +2,7 @@ import disease, terrain
 
 class MapEditor(object):
 
-    keys = ['b', 'f', 'h', 'x', 'g']
+    keys = ['b', 'f', 'h', 'x', 'g', 's']
 
     def __init__(self, cellmap):
         self.cellmap = cellmap
@@ -16,6 +16,8 @@ class MapEditor(object):
             self.cellmap.cell_get(x, y).flora = disease.StaphAureus()
         elif key == 'h':
             self.cellmap.cell_get(x, y).terrain = terrain.HairFollicle()
+        elif key == 's':
+            self.cellmap.cell_get(x, y).terrain = terrain.SebaceousGland()
         elif key == 'x':
             self.cellmap.cell_get(x, y).terrain = None
             self.cellmap.cell_get(x, y).flora = None

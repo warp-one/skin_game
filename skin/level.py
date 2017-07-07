@@ -32,7 +32,7 @@ class Camera(object):
 
 class Level(object):
 
-    w, h = 30, 30
+    w, h = 40, 30
 
     def __init__(self, game):
         self.game = game
@@ -40,7 +40,7 @@ class Level(object):
         self.create_consoles()
         self.camera = Camera(self)
         
-        self.cellmap = cellmap.CellMap(self.w, self.h, self.consoles)
+        self.cellmap = cellmap.CellMap(30, 30, self.consoles)
         self.player_controls = controls.KeyboardControls(self.cellmap)
         self.environment = environment.BasicEnvironment(self.cellmap, environment.test_rules)
 
@@ -73,9 +73,10 @@ class Level(object):
 #        for c in self.consoles:
 #            libtcod.console_clear(c)
 #        return
-#        for x in xrange(settings.SCREEN_WIDTH):
-#            for y in xrange(settings.SCREEN_HEIGHT):
-#                libtcod.console_set_char_background(self.fluids_layer, x, y, libtcod.black)
+        for x in xrange(10):
+            for y in xrange(5):
+                libtcod.console_put_char(self.hud_layer, x + 30, y,
+                                        ' ', libtcod.BKGND_NONE)
         if self.cellmap.cursor:
             x, y = self.cellmap.cursor.x, self.cellmap.cursor.y
             libtcod.console_put_char(self.hud_layer, x, y,

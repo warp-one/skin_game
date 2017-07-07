@@ -6,6 +6,8 @@ LIGHT_SKIN_TONES = [libtcod.lightest_amber,
                     libtcod.lightest_sepia,
                     ]
                     
+SEBUM = libtcod.Color(227, 217, 145)
+                    
 FLORA_MALASSEZIA_COLOR = libtcod.Color(176, 69, 121)
 FLORA_MALASSEZIA_MAP_COLOR = libtcod.light_green #libtcod.Color(206, 228, 209)
 FLORA_STAPH_COLOR = libtcod.Color(215, 95, 0)

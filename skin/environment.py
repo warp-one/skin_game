@@ -23,8 +23,9 @@ def migrate_disease(A, B):
         if (A.flora is None or B.flora is None) and A.flora != B.flora:
             source = (A if A.flora else B)
             destination = (B if source is A else A)
-            destination.flora = source.flora
-            source.flora = None
+            if destination.habitability(source.flora) > source.habitability(source.flora): 
+                destination.flora = source.flora
+                source.flora = None
             
         
         

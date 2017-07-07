@@ -14,6 +14,8 @@ class Malassezia(Disease):
     char = 'p'
     color = colors.FLORA_MALASSEZIA_COLOR
     bgcolor = colors.FLORA_MALASSEZIA_MAP_COLOR
+    required_resources = {"lipids":2, "liquids":1}
+    
     
     
 class StaphAureus(Disease):
@@ -22,3 +24,4 @@ class StaphAureus(Disease):
     char = 's'
     color = colors.FLORA_STAPH_COLOR
     bgcolor = colors.FLORA_STAPH_MAP_COLOR
+    required_resources = {"liquids":1}

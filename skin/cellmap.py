@@ -70,6 +70,17 @@ class SkinCell(object):
             return self.statuses[status_type]
         except KeyError:
             return False
+            
+    def habitability(self, germ):
+        surpluses = []
+        for r in germ.required_resources:
+            required_amount = germ.required_resources[r]
+            current_amount = self.status_amount(r)
+            if current_amount < required_amount:
+                return -1
+            pct_surplus = (current_amount - required_amount)/float(required_amount)
+            surpluses.append(pct_surplus)
+        return sum(surpluses)/len(surpluses)
                 
     def sweat(self):
         if self.terrain and self.terrain.name == "hair":
@@ -78,13 +89,28 @@ class SkinCell(object):
             will_sweat = not randint(0, 220)
         if will_sweat:
             self.status_add("sweat")
+        if self.terrain and self.terrain.name == "gland":
+            for tile in self.cellmap.area_get_cross(*self.location):
+                if tile.status_get("sebum"):
+                    continue
+                self.status_add("sebum")
+            
             
     def sweat_evaporate(self):
         #if self.status_percentage("wet") > CALCULATED_MOISTURE_TENDENCY:
         if not randint(0, 4):
             self.status_add("sweat", amt=-1)
             
-                
+        
+    def info_list(self):
+        info = ["A patch of skin. It's about {0} degrees.".format(self.temperature)]
+        for t in filter(lambda x: x, (self.terrain, self.flora)):
+            info.append(t.name)
+        for s in self.statuses:
+            info.append((s + ' ' + str(self.statuses[s].amount)))
+        return info
+        
+        
                 
     def update(self):
         #self.dry(heatmap, exposedmap)
@@ -100,6 +126,9 @@ class SkinCell(object):
                 
             
 class CellMap(object):
+
+    hud_location = (30, 0)
+
     def __init__(self, w, h, cons):
         self.w, self.h = w, h
         self.cell_con = cons["background"]
@@ -126,7 +155,17 @@ class CellMap(object):
         
     def cell_get(self, x, y):
         i = tools.xy_to_index(x, y, self.w)
-        return self.cells[i]
+        try:
+            return self.cells[i]
+        except IndexError:
+            return None
+        
+    def area_get_cross(self, x, y):
+        a = [self.cell_get(cx, cy) for (cx, cy) in tools.generate_Z2(limit=1, origin=(x, y))]
+        #a = [self.cell_get(cx, cy) for (cx, cy) in [(x + p[0], y + p[1]) for p in tools.CIRCLE_RANGE_1]]
+        return a
+        
+  #  def cell_find_status(self, ox, oy, status_type, 
         
 #    def evaporate(self):
 #        sweat_cells = filter(lambda x: x.status_get("sweat"), self.cells)
@@ -168,6 +207,16 @@ class CellMap(object):
             libtcod.console_set_default_foreground(self.hud_con, libtcod.dark_sepia)
             libtcod.console_put_char(self.hud_con, x, y, 
                                             char, libtcod.BKGND_NONE)
+                                            
+            selected_tile = self.cell_get(self.cursor.x, self.cursor.y)
+            if selected_tile:
+                for j, item in enumerate(selected_tile.info_list()):
+                    for i, c in enumerate(item):
+                        x, y = self.hud_location[0] + i, self.hud_location[1] + j 
+                        libtcod.console_set_default_foreground(self.hud_con, selected_tile.color)
+                        libtcod.console_put_char(self.hud_con, x, y, 
+                                                        c, libtcod.BKGND_NONE)
+                    
             
                                             
     def update(self):
