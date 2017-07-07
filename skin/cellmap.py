@@ -90,10 +90,13 @@ class SkinCell(object):
         if will_sweat:
             self.status_add("sweat")
         if self.terrain and self.terrain.name == "gland":
-            for tile in self.cellmap.area_get_cross(*self.location):
-                if tile.status_get("sebum"):
-                    continue
-                self.status_add("sebum")
+            if not randint(0, 5):
+                excretion_field = self.cellmap.area_get_cross(*self.location)
+                for tile in excretion_field:
+                    if "sebum" in tile.statuses:
+                        continue
+                    tile.status_add("sebum")
+                    break
             
             
     def sweat_evaporate(self):
@@ -110,15 +113,15 @@ class SkinCell(object):
             info.append((s + ' ' + str(self.statuses[s].amount)))
         return info
         
-        
+    def tick(self):
+        self.sweat()
+        self.sweat_evaporate()
                 
     def update(self):
         #self.dry(heatmap, exposedmap)
         #self.break_out()
         #self.heal()
         #etc
-        self.sweat()
-        self.sweat_evaporate()
         
         for s in self.statuses.values():
             if s.amount <= 0:

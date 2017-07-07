@@ -58,3 +58,5 @@ class BasicEnvironment(object):
                 
     def update(self):
         self.run_cell_interactions()
+        for c in self.cellmap.cells:
+            c.tick()
