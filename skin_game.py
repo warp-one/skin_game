@@ -1,6 +1,6 @@
 import libtcodpy as libtcod
 
-from skin import tools, constants, level, settings
+from skin import level, settings, map_modes
 
     
  
@@ -21,15 +21,16 @@ class Game(object):
         
     def execute(self):
         while not libtcod.console_is_window_closed():
-#            libtcod.console_set_default_foreground(0, libtcod.white)
+#           libtcod.console_set_default_foreground(0, libtcod.white)
             self.current_level.update_all()
             self.current_level.render_all()
             libtcod.console_blit(self.current_level.background, 0, 0, 
                                  self.width, self.height, 0, 0, 0)
-            libtcod.console_blit(self.current_level.fluids_layer, 0, 0, 
-                                 self.width, self.height, 0, 0, 0,
-                                 1.0,
-                                 0.5)
+            if not map_modes.current_map_mode:
+                libtcod.console_blit(self.current_level.fluids_layer, 0, 0,
+                                     self.width, self.height, 0, 0, 0,
+                                     1.0,
+                                     0.5)
             libtcod.console_blit(self.current_level.hud_layer, 0, 0, 
                                  self.width, self.height, 0, 0, 0,
                                  1.0,
@@ -41,5 +42,5 @@ class Game(object):
                 break
         
 if __name__ == '__main__':
-    game = Game(40, 30)
+    game = Game(settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)
     game.execute()

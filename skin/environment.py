@@ -56,7 +56,7 @@ class BasicEnvironment(object):
             for interact in self.cell_pair_interactions:
                 interact(A, B)
                 
-    def update(self):
+    def advance_environment_turn(self):
         self.run_cell_interactions()
         for c in self.cellmap.cells:
             c.tick()

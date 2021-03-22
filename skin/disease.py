@@ -4,7 +4,15 @@ class Disease(object):
     name = "disease"
     water_min = 0.1
     water_max = 1.0
+
     def __init__(self):
+        self.current_objective = None
+        self.current_tile = None
+
+    def locate_objective(self):
+        current_tile_habi
+
+    def is_current_tile_habitable(self):
         pass
         
         
