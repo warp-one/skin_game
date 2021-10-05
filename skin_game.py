@@ -1,9 +1,8 @@
 import libtcodpy as libtcod
 
-from skin import level, settings, map_modes
+from skin import level, settings
 
-    
- 
+
 class Game(object):
     def __init__(self, ww, wh):
         self.width, self.height = ww, wh
@@ -12,11 +11,10 @@ class Game(object):
                 libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_ASCII_INROW,
                 )
         libtcod.console_init_root(self.width, self.height, 
-                'on a thigh somewhere', False, renderer=libtcod.RENDERER_SDL)
+                'back into the caves', False, renderer=libtcod.RENDERER_SDL)
         libtcod.sys_set_fps(settings.LIMIT_FPS)
 
         self.current_level = level.Level(self)
-        
         
         
     def execute(self):
@@ -26,18 +24,13 @@ class Game(object):
             self.current_level.render_all()
             libtcod.console_blit(self.current_level.background, 0, 0, 
                                  self.width, self.height, 0, 0, 0)
-            if not map_modes.current_map_mode:
-                libtcod.console_blit(self.current_level.fluids_layer, 0, 0,
-                                     self.width, self.height, 0, 0, 0,
-                                     1.0,
-                                     0.5)
-            libtcod.console_blit(self.current_level.hud_layer, 0, 0, 
+            libtcod.console_blit(self.current_level.hud_layer, 0, 0,
                                  self.width, self.height, 0, 0, 0,
                                  1.0,
                                  0.0)
             libtcod.console_flush()
             self.current_level.clear_all()
-            exit = self.current_level.player_controls.handle_keys()
+            exit = self.current_level.player_controls()
             if exit:
                 break
         

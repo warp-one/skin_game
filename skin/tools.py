@@ -68,3 +68,4 @@ def xy_to_NSEW(x, y):
 
 CIRCLE_RANGE_1 = generate_Z2(limit=1)
 CIRCLE_RANGE_2 = generate_Z2(limit=2)
+
